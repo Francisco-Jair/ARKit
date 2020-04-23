@@ -65,6 +65,8 @@ export default function App() {
 
   function onRender() {
     points.update();
+    cube.rotation.x += 0.1
+    cube.rotation.y += 0.1
     renderer.render(scene, camera);
   }
 
