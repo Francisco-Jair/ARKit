@@ -42,13 +42,17 @@ export default function App() {
 
     //Carregar a imagem
     //const texture = await ExpoTHREE.loadAsync("https://vignette.wikia.nocookie.net/tkoc/images/a/a4/Dark_Magician.png/revision/latest?cb=20181110014110&path-prefix=pt-br")
-    const texture = await ExpoTHREE.loadAsync("https://pngimg.com/uploads/pokemon/pokemon_PNG108.png")
-    image = new THREE.MeshPhongMaterial({ map: texture })
+    //const texture = await ExpoTHREE.loadAsync("https://pngimg.com/uploads/pokemon/pokemon_PNG108.png")
+    //const texture = await ExpoTHREE.loadAsync("https://pngimg.com/uploads/madagascar_penguins/madagascar_penguins_PNG82.png")
 
+    /*
+    para as imagens acima
+    const texture = await ExpoTHREE.loadAsync(require('../assets/image/Dark_Magician.png')) // OK
+    image = new THREE.MeshPhongMaterial({ map: texture })
     dark_magic = new THREE.Mesh(geometry, image)//Add ao AR
     dark_magic.position.z = -0.4
     scene.add(dark_magic)
-
+*/
     //Cubo
     material = new THREE.MeshPhongMaterial({
       color: 0x7159c1,
@@ -59,8 +63,27 @@ export default function App() {
     //scene.add(cube)
 
 
-    scene.add(new THREE.AmbientLight(0xffffff))
 
+    //EM 3D
+    const irom = {
+      "IronMan.obj": require("../assets/models/IronMan.obj"),
+      "IronMan.mtl": require("../assets/models/IronMan.mtl")
+    }
+
+    const ironman = await ExpoTHREE.loadAsync(
+      [irom['IronMan.obj'], irom['IronMan.mtl']],
+      null,
+      name => irom[name]
+    )
+
+
+    ExpoTHREE.utils.scaleLongestSideToSize(ironman, 0.1)
+    ExpoTHREE.utils.alignMesh(ironman, { y: 1 })
+
+    scene.add(ironman)
+
+
+    scene.add(new THREE.AmbientLight(0xffffff))
     points = new ThreeAr.Points()
     scene.add(points)
 
@@ -78,7 +101,7 @@ export default function App() {
 
   function onRender() {
     points.update();
-    //cube.rotation.x += 0.1
+    //cube.rotation.x += 0.1//Para rotacionar
     //cube.rotation.y += 0.1
     renderer.render(scene, camera);
   }
